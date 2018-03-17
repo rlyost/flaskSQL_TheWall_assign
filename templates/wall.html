@@ -13,8 +13,6 @@
             <h1>CodingDojo WALL</h1>
             <h2 class='head_welcome'>Welcome {{ session['fname'] }}</h2>
             <a href="/logoff">log off</a>
-        </div>
-        <div id='main'>
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     {% for message in messages %}
@@ -24,6 +22,9 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
+        </div>
+        <div id='main'>
+            
                 <form action='/post_msg' method='POST' class='post_msg'>
                     <h2>Post a message</h2>
                     <label for="message"><input type="text" name="message" id="message"></label>

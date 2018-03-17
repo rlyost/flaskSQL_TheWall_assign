@@ -1,37 +1,63 @@
+body {
+    background-color: lightgrey;
+}
 #wrapper {
     width: 60%;
     margin: 50px auto;
     text-align: center;
-}
-#wallwrap {
-    width: 80%;
-    margin: 50px auto;
-    text-align: left;
-    vertical-align: top;
+    background-color: lightgrey;
 }
 .flash_msg {
     border: 2px solid black;
+    text-align: center;
 }
 .red {
+    font-size: 14pt;
     color: red;
+    text-align: center;
+    margin: 0 auto;
 }
 .loghead {
     width: 345px;
     margin: 0 auto;
 }
+.logbut {
+    color: white;
+    border: 1px solid black;
+    background-color: rgb(83, 166, 248);
+    box-shadow: 2px 2px;
+}
+
+/* THE WALL */
+#wallwrap {
+    width: 80%;
+    margin: 0px auto;
+    text-align: left;
+    vertical-align: top;
+    background-color: lightgrey;
+}
 #wallhead {
-    width: 90%;
+    width: 100%;
     display: inline-block;
     text-align: left;
     border-bottom: 4px solid black;
     background-color: rgb(83, 166, 248);
+    padding: 0 20px;
 }
 .head_welcome {
     text-align: left;
     display: inline-block;
 }
+
+/* MAIN WALL */
+#main {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    background-color: white;
+}
 .post_msg {
-    width: 90%;
+    width: 100%;
     margin: 0 auto;
     min-height: 150px;
     text-align: left;
@@ -49,13 +75,7 @@
     border: 1px solid black;
     background-color: rgb(83, 166, 248);
     box-shadow: 2px 2px;
-    margin: 0 70%;
-}
-.logbut {
-    color: white;
-    border: 1px solid black;
-    background-color: rgb(83, 166, 248);
-    box-shadow: 2px 2px;
+    margin: 0 80%;
 }
 .comment_but {
     color: white;
@@ -65,7 +85,7 @@
     margin: 0 70%;
 }
 #message {
-    width: 80%;
+    width: 90%;
     height: 60px;
 }
 #comment {
@@ -76,8 +96,8 @@
     text-align: left;
 }
 .each_post {
-    margin: 0 10px 0 20px;
-    display: inline;
+    margin: 0 0 0 0px;
+    display: block;
 }
 .cmter {
     margin: 20px 0 0 10%;
@@ -96,7 +116,7 @@ p {
     text-align: left;
 }
 h1 {
-    margin: 0px 250px 0px 50px;
+    margin: 0px 300px 0px 50px;
     display: inline-block;
 }
 h2 {

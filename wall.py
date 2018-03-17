@@ -148,7 +148,9 @@ def login():
 def post_msg():
     message = request.form['message']
     userid = session['logged_id']
-
+    if len(message) < 2:
+        flash("Message cannot be blank!")
+        return redirect('/wall')
     # Write query as a string.
     # we want to insert into our Db.
     query = "INSERT INTO messages (message, created_at, updated_at, users_id) VALUES (:message, NOW(), NOW(), :userid);"
@@ -169,6 +171,9 @@ def post_cmt():
     comment = request.form['comment']
     userid = session['logged_id']
     message_id = request.form['message_id']
+    if len(comment) < 2:
+        flash("Comment can not be blank!")
+        return redirect('/wall')
     # Write query as a string.
     # we want to insert into our Db.
     query = "INSERT INTO comments (comment, created_at, updated_at, messages_id, users_id) VALUES (:comment, NOW(), NOW(), :message_id, :userid);"
