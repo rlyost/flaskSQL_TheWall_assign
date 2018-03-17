@@ -96,6 +96,7 @@ def registration():
     mysql.query_db(query, data)
     get_id = mysql.query_db(query_id, data_id)
     session['logged_id'] = get_id[0]['id']
+    session['check_pw'] = session['hashed_pw']
     return redirect('/wall')
 
 # LOGIN*********************************************
