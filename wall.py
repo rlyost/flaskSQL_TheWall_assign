@@ -18,9 +18,13 @@ def index():
 
 @app.route('/wall')
 def wall():
-    query = "SELECT users.first_name, users.last_name, message, messages.id, messages.created_at, comments.comment, comments.messages_id FROM messages JOIN users ON users.id = messages.users_id LEFT JOIN comments ON messages.id = comments.messages_id ORDER BY created_at DESC;"
+    # password validation
+    # if session['hashed_pw'] != session['check_pw']:
+    #     return redirect('/')
+    
+    query = "SELECT users.id AS userid, users.first_name, users.last_name, message, messages.id AS y, messages.created_at FROM messages JOIN users ON users.id = messages.users_id GROUP BY messages.id ORDER BY created_at DESC;"
     messages = mysql.query_db(query)
-    query2 = "SELECT comments.users_id, users.id, users.first_name, users.last_name, comments.messages_id, comment, comments.created_at, messages.id FROM comments JOIN users ON users.id = comments.users_id LEFT JOIN messages ON messages.id = comments.messages_id ORDER BY comments.created_at DESC;"
+    query2 = "SELECT comments.users_id AS cu_id, users.id, users.first_name, users.last_name, comments.messages_id, comments.id AS x, comment, comments.created_at, messages.id FROM comments JOIN users ON users.id = comments.users_id LEFT JOIN messages ON messages.id = comments.messages_id ORDER BY comments.created_at DESC;"
     comments = mysql.query_db(query2)
 
     return render_template('wall.html', all_msg=messages, all_cmts=comments)
@@ -32,7 +36,7 @@ def registration():
     fname = request.form['fname']
     lname = request.form['lname']
     email = request.form['regemail']
-    hashed_password = md5.new(request.form['regpassword']).hexdigest()
+    session['hashed_pw'] = md5.new(request.form['regpassword']).hexdigest()
     password2 = request.form['regpassword2']
     session['fname'] = fname
     session['lname'] = lname
@@ -49,7 +53,7 @@ def registration():
             'fname': request.form['fname'],
             'lname':  request.form['lname'],
             'regemail': request.form['regemail'],
-            'hashed_password': hashed_password
+            'hashed_password': session['hashed_pw']
            }
     check = mysql.query_db(query_val, data)
     
@@ -99,7 +103,7 @@ def login():
     query = "SELECT email FROM users WHERE email = :logemail;"
     query_pw = "SELECT password FROM users WHERE email = :logemail;"
     query_id = "SELECT id, first_name, last_name FROM users WHERE email = :logemail;"
-    hashed_password = md5.new(request.form['logpassword']).hexdigest()
+    session['hashed_pw'] = md5.new(request.form['logpassword']).hexdigest()
     # We'll then create a dictionary of data from the POST data received.
     data = {
              'logemail': request.form['logemail'],
@@ -112,6 +116,7 @@ def login():
     check = mysql.query_db(query, data)
     # query for password validation
     check_pw = mysql.query_db(query_pw, data)
+    session['check_pw'] = check_pw[0]['password']
 
     # Validates email address for proper format.
     if len(request.form['logemail']) < 1:
@@ -124,10 +129,10 @@ def login():
         flash("Email not found!")
         return redirect('/')
 
-    #password validation
-    # if hashed_password != check_pw[0]['password']:
-    #     flash("Password does not match.")
-    #     return redirect('/')
+    # password validation
+    if session['hashed_pw'] != session['check_pw']:
+        flash("Password does not match.")
+        return redirect('/')
 
     get_id = mysql.query_db(query_id, data_id)
     session['logged_id'] = get_id[0]['id']
@@ -175,5 +180,47 @@ def post_cmt():
     mysql.query_db(query, data)
     return redirect('/wall')
 
+# LOGOFF *********************************************
+
+@app.route('/logoff')
+def logoff():
+    session['logged_id'] = ''
+    session['fname'] = ''
+    session['lname'] = ''
+    session['hashed_pw'] = ''
+    return redirect('/')
+
+# DELETE MESSAGE *******************************************
+
+@app.route('/deletem/<mid>')
+def deletem(mid):
+    query = "DELETE FROM messages WHERE messages.id = :id;"
+    query2 = "SELECT id FROM comments WHERE comments.messages_id = :id;"
+    query3 = "DELETE FROM comments WHERE comments.id = :idc"
+    data = {
+        'id': int(str(mid))
+    }
+    msg_cmts = 0
+    msg_cmts = mysql.query_db(query2,data)
+    if msg_cmts != []:
+        data2 = {
+            'idc': int(msg_cmts[0]['id'])
+        }
+    for cmts in msg_cmts:
+        mysql.query_db(query3,data2)
+    mysql.query_db(query,data)
+    return redirect('/wall')
+
+# DELETE MESSAGE *******************************************
+
+@app.route('/deletec/<cid>')
+def deletec(cid):
+    query = "DELETE FROM comments WHERE comments.id = :id;"
+    data = {
+        'id': int(str(cid))
+    }
+    # Run query with inserted data.
+    mysql.query_db(query,data)
+    return redirect('/wall')
 
 app.run(debug=True)

@@ -76,14 +76,17 @@
     text-align: left;
 }
 .each_post {
-    margin: 0 0 0 30px;
+    margin: 0 10px 0 20px;
+    display: inline;
 }
 .cmter {
-    margin: 0 80px;
+    margin: 20px 0 0 10%;
     text-align: left;
 }
-.each_cmt {
-    margin: 20px 0px 0px 0px;
+.each_cmter {
+    /* margin: 0px 0px 0px 0px; */
+    margin: 0 0 0 10%;
+    display: inline;
 }
 a {
     margin: 0px 20px 0px 0px;
