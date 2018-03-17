@@ -119,7 +119,6 @@ def login():
     check = mysql.query_db(query, data)
     # query for password validation
     check_pw = mysql.query_db(query_pw, data)
-    session['check_pw'] = check_pw[0]['password']
 
     # Validates email address for proper format.
     if len(request.form['logemail']) < 1:
@@ -133,6 +132,7 @@ def login():
         return redirect('/')
 
     # password validation
+    session['check_pw'] = check_pw[0]['password']
     if session['hashed_pw'] != session['check_pw']:
         flash("Password does not match.")
         return redirect('/')
