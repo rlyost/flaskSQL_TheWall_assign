@@ -9,10 +9,12 @@
 </head>
 <body>
     <div id='wallwrap'>
+        <!-- Header at the top! -->
         <div id='wallhead'>
             <h1>CodingDojo WALL</h1>
             <h2 class='head_welcome'>Welcome {{ session['fname'] }}</h2>
             <a href="/logoff">log off</a>
+            <!-- FLASH message if user tries to leave a blank message or comment. -->
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     {% for message in messages %}
@@ -24,20 +26,21 @@
             {% endwith %}
         </div>
         <div id='main'>
-            
+            <!-- Add new message texted input. -->
                 <form action='/post_msg' method='POST' class='post_msg'>
                     <h2>Post a message</h2>
                     <label for="message"><input type="text" name="message" id="message"></label>
                     <input type="submit" value="Post a message" class="but">
                 </form>
                     
+            <!-- display all message with comments on the Wall.     -->
             {% for post in all_msg: %}
                 <div>
                     <h3 class="poster">{{ post['first_name'] }} {{ post['last_name'] }}
                     - {{ post['created_at'].strftime('%b %d, %Y') }}</h3>
                     <div class="each_post">
                         <p class='each_post'>{{ post['message'] }}</p>
-                        
+            <!-- You get a delete button by messages and comments that the logged in user wrote.   -->                
                         {% if post.userid == session['logged_id']: %}
                             <a href="/deletem/{{ post.y }}"><button>Delete</button></a>
                         {% endif %}
@@ -49,6 +52,7 @@
                         <div>
                             <h4 class="cmter">{{ comment['first_name'] }} {{ comment['last_name'] }} - {{ comment['created_at'].strftime('%b %d, %Y') }}</h4>
                             <p class='each_cmter'>{{ comment['comment'] }}</p>
+            <!-- You get a delete button by comments that the logged in user wrote.   -->                                            
                             {% if comment.cu_id == session['logged_id']: %}
                                 <a href="/deletec/{{ comment.x }}"><button>Delete</button></a>
                             {% endif %}
@@ -56,6 +60,7 @@
                     {% endif %}
                 {% endfor %}
 
+                <!-- Add new comment texted input. -->
                 <form action='/post_cmt' method='POST' class='post_cmt'>
                     <h2>Post a comment</h2>
                     <label for="comment"><input type="text" name="comment" id="comment"></label>
