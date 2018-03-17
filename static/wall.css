@@ -85,7 +85,7 @@
 }
 .each_cmter {
     /* margin: 0px 0px 0px 0px; */
-    margin: 0 0 0 10%;
+    margin: 0 40px 0 10%;
     display: inline;
 }
 a {
@@ -115,7 +115,15 @@ form {
 }
 input {
     margin: 0px 30px 7px 20px;
+    word-wrap: break-word;
+}
+input[type=text] {
+    word-wrap: break-word;
+    padding: 5px;
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+    overflow-y: scroll; /* Add vertical scrollbar */
 }
 label {
     display: block;
+    word-wrap: break-word;
 }

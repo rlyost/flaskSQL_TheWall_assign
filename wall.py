@@ -12,6 +12,8 @@ mysql = MySQLConnector(app,'thewall')
 
 @app.route('/')
 def index():
+    session['hashed_pw'] = 0
+    session['check_pw'] = 1
     return render_template('index.html')
 
 # WALL *********************************************
@@ -19,8 +21,8 @@ def index():
 @app.route('/wall')
 def wall():
     # password validation
-    # if session['hashed_pw'] != session['check_pw']:
-    #     return redirect('/')
+    if session['hashed_pw'] != session['check_pw']:
+        return redirect('/')
     
     query = "SELECT users.id AS userid, users.first_name, users.last_name, message, messages.id AS y, messages.created_at FROM messages JOIN users ON users.id = messages.users_id GROUP BY messages.id ORDER BY created_at DESC;"
     messages = mysql.query_db(query)
@@ -190,7 +192,7 @@ def logoff():
     session['hashed_pw'] = ''
     return redirect('/')
 
-# DELETE MESSAGE *******************************************
+# DELETE MESSAGE AND COMMENTS *******************************************
 
 @app.route('/deletem/<mid>')
 def deletem(mid):
@@ -211,7 +213,7 @@ def deletem(mid):
     mysql.query_db(query,data)
     return redirect('/wall')
 
-# DELETE MESSAGE *******************************************
+# DELETE COMMENT *******************************************
 
 @app.route('/deletec/<cid>')
 def deletec(cid):
