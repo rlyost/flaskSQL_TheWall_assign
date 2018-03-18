@@ -26,7 +26,7 @@ def wall():
     
     query = "SELECT users.id AS userid, users.first_name, users.last_name, message, messages.id AS y, messages.created_at FROM messages JOIN users ON users.id = messages.users_id GROUP BY messages.id ORDER BY created_at DESC;"
     messages = mysql.query_db(query)
-    query2 = "SELECT comments.users_id AS cu_id, users.id, users.first_name, users.last_name, comments.messages_id, comments.id AS x, comment, comments.created_at, messages.id FROM comments JOIN users ON users.id = comments.users_id LEFT JOIN messages ON messages.id = comments.messages_id ORDER BY comments.created_at DESC;"
+    query2 = "SELECT comments.users_id AS cu_id, users.id, users.first_name, users.last_name, comments.messages_id, comments.id AS x, comment, comments.created_at, messages.id FROM comments JOIN users ON users.id = comments.users_id JOIN messages ON messages.id = comments.messages_id ORDER BY comments.created_at ASC;"
     comments = mysql.query_db(query2)
 
     return render_template('wall.html', all_msg=messages, all_cmts=comments)
